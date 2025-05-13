@@ -5,7 +5,7 @@ let yen = defaultYen;
 document.querySelector("#yenCoin").addEventListener('click', function () {
     yen += 1
     console.log(yen)
-    document.querySelector("p").textContent = `Yen: ${yen}`
+    document.querySelector("p").textContent = `¥${yen}`
     localStorage.setItem("Yen", yen)
 });
 document.querySelector("#yenCoin").onkeyup = (e) => {
@@ -15,17 +15,17 @@ document.querySelector("#yenCoin").onkeyup = (e) => {
 ) {
     yen += 1
     console.log(yen)
-    document.querySelector("p").textContent = `Yen: ${yen}`
+    document.querySelector("p").textContent = `Yen${yen}`
     localStorage.setItem("Yen", yen)
 }
 }
 
 document.addEventListener("keyup", (e) => {
     if (e.key === " " || e.code === "Space") {
-        e.preventDefault(); // Prevent default spacebar behavior (e.g., scrolling)
+        e.preventDefault();
         yen += 1;
         console.log(yen);
-        document.querySelector("p").textContent = `Yen: ${yen}`;
+        document.querySelector("p").textContent = `¥${yen}`;
         localStorage.setItem("Yen", yen);
     }
 });
@@ -44,7 +44,7 @@ window.addEventListener('load', () => {
         document.textContent = yenValue.Yen
         yen = Number(yenValue);
 
-        document.querySelector("p").textContent = `Yen: ${yenValue}`
+        document.querySelector("p").textContent = `¥${yenValue}`
     }
 });
 
