@@ -13,12 +13,14 @@
     <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
         <button>
             <img
+                draggable="false"
                 src="/img/japanese-yen.png"
-                class="hover:cursor-pointer"
+                class="hover:cursor-pointer select-none"
                 id="yenCoin"
             />
         </button>
-        <p>Yen: </p>
     </div>
+    <p draggable="false" class="select-none pointer-events-none text-8xl text-green-600 font-bold text-center justify-center absolute top-4 left-4">¥: </p>
+    <button id="multiplier" class="absolute top-32 left-12 h-fit w-fit flex p-6 pt-4 bg-gray-100 justify-center text-center rounded-full hover:cursor-pointer hover:bg-gray-300">x2</button>
 </body>
 </html>
