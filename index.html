@@ -11,16 +11,26 @@
 <body>
     <input type="color" name="colour" placeholder="Enter a colour" class="absolute top-0 right-0 w-6 h-6 bg-gray-100 rounded-md p-[1px]">
     <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-        <button>
-            <img
-                draggable="false"
-                src="/img/japanese-yen.png"
-                class="hover:cursor-pointer select-none"
-                id="yenCoin"
-            />
-        </button>
+        <img
+            draggable="false"
+            src="/img/japanese-yen.png"
+            class="hover:cursor-pointer select-none"
+            id="yenCoin"
+        />
     </div>
     <p draggable="false" class="select-none pointer-events-none text-8xl text-green-600 font-bold text-center justify-center absolute top-4 left-4">¥: </p>
-    <button id="multiplier" class="absolute top-32 left-12 h-fit w-fit flex p-6 pt-4 bg-gray-100 justify-center text-center rounded-full hover:cursor-pointer hover:bg-gray-300">x2</button>
+    
+    <div class="absolute top-32 left-4 flex flex-row gap-4">
+        <button id="multiplier" class="flex flex-col items-center bg-gray-100 rounded-xl p-4 pt-4 text-center hover:cursor-pointer hover:bg-gray-300 focus:outline-none border-none">
+            <span class="flex items-center justify-center text-lg">x2</span>
+            <div id="multiplierPriceDisplay" class="text-lg text-center mt-2"></div>
+            <span id="multiplierDisplay"></span>
+        </button>
+        <button id="cps" class="flex flex-col items-center h-fit w-fit bg-gray-100 rounded-xl p-4 pt-4 text-center hover:cursor-pointer hover:bg-gray-300 focus:outline-none border-none">
+            <span class="flex items-center justify-center text-lg">CPS</span>
+            <div id="cpsPriceDisplay" class="text-lg text-center mt-2"></div>
+            <span id="cpsDisplay"></span>
+        </button>
+    </div>
 </body>
 </html>

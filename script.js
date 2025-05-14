@@ -1,95 +1,107 @@
-const input = document.querySelector("input");
-const defaultYen = 0;
-let yen = defaultYen;
+const input = document.querySelector('input');
+const yenDisplay = document.querySelector('p');
+const body = document.querySelector('body');
+const yenCoin = document.querySelector('#yenCoin');
+const cpsBtn = document.querySelector('#cps');
+const multiplierBtn = document.querySelector('#multiplier');
+const multiplierPriceDisplay = document.getElementById('multiplierPriceDisplay');
+const cpsPriceDisplay = document.getElementById('cpsPriceDisplay');
+const multiplierDisplay = document.getElementById('multiplierDisplay');
+const cpsDisplay = document.getElementById('cpsDisplay');
+
+let yen = 0;
+let cps = 0;
+let cpsPrice = 25;
 let multiplier = 1;
 let multiplierPrice = 100;
+let cpsInterval = null;
 
-const updateMultiplier = (num) => {
-    multiplier = num;
-};
+var clickSound = new Audio("Cropped.mp3")
 
-document.querySelector("#yenCoin").onkeyup = (e) => {
-    if (e.key == " " ||
-        e.code == "Space" ||
-        e.keyCode == 32
-    ) {
-        yen += 1
-        console.log(yen)
-        document.querySelector("p").textContent = `Yen${yen}`
-        localStorage.setItem("Yen", yen)
-    }
+function updateDisplays() {
+  yenDisplay.textContent = `¥${yen.toLocaleString()}`;
+  multiplierPriceDisplay.textContent = `Price: ¥${multiplierPrice.toLocaleString()}`;
+  cpsPriceDisplay.textContent = `Price: ¥${cpsPrice.toLocaleString()}`;
+  multiplierDisplay.textContent = `Multiplier: x${multiplier.toLocaleString()}`;
+  cpsDisplay.textContent = `CPS: ${cps.toLocaleString()}`;
 }
 
-document.addEventListener("keyup", (e) => {
-    if (e.key === " " || e.code === "Space") {
-        e.preventDefault();
-        yen += 1;
-        console.log(yen);
-        document.querySelector("p").textContent = `¥${yen}`;
-        localStorage.setItem("Yen", yen);
-    }
+function saveState() {
+  localStorage.setItem('Yen', yen);
+  localStorage.setItem('CPS', cps);
+  localStorage.setItem('CPSPrice', cpsPrice);
+  localStorage.setItem('Multiplier', multiplier);
+  localStorage.setItem('MultiplierPrice', multiplierPrice);
+}
+
+function startCpsInterval() {
+  if (cpsInterval) clearInterval(cpsInterval);
+  if (cps > 0) {
+    cpsInterval = setInterval(() => {
+      yen += cps;
+      yenDisplay.textContent = `¥${yen.toLocaleString()}`;
+      localStorage.setItem('Yen', yen);
+    }, 1000);
+  }
+}
+
+function loadState() {
+  yen = Number(localStorage.getItem('Yen')) || 0;
+  cps = Number(localStorage.getItem('CPS')) || 0;
+  cpsPrice = Number(localStorage.getItem('CPSPrice')) || 25;
+  multiplier = Number(localStorage.getItem('Multiplier')) || 1;
+  multiplierPrice = Number(localStorage.getItem('MultiplierPrice')) || 100;
+  const colour = localStorage.getItem('colour');
+  if (colour) {
+    input.value = colour;
+    body.style.background = colour;
+  }
+}
+
+yenCoin.addEventListener('click', () => {
+  yen += multiplier;
+  yenDisplay.textContent = `¥${yen.toLocaleString()}`;
+  localStorage.setItem('Yen', yen);
+  clickSound.currentTime = 0;
+  clickSound.play(); 
 });
 
-document.querySelector("#yenCoin").addEventListener('click', function () {
-    yen += (1 * multiplier)
-    console.log(yen)
-
-    document.querySelector("p").textContent = `¥${yen}`
-    localStorage.setItem("Yen", yen)
+document.addEventListener('keyup', e => {
+  if (e.key === ' ' || e.code === 'Space') {
+    yen += 1;
+    yenDisplay.textContent = `¥${yen.toLocaleString()}`;
+    localStorage.setItem('Yen', yen);
+  }
 });
 
+cpsBtn.addEventListener('click', () => {
+  if (yen >= cpsPrice) {
+    yen -= cpsPrice;
+    cps += 1;
+    cpsPrice = Math.ceil(cpsPrice * 1.1);
+    saveState();
+    startCpsInterval();
+    updateDisplays();
+  }
+});
 
-window.addEventListener('load', () => {
-    const yenValue = localStorage.getItem("Yen");
-    const data = localStorage.getItem("colour");
-    const multiplierData = localStorage.getItem("Multiplier");
-    const multiplierPriceData = localStorage.getItem("MultiplierPrice");
-
-    if (data) {
-        input.textContent = data.colour;
-        document.querySelector("body").style.background = data;
-    }
-
-    if (yenValue) {
-        yen = Number(yenValue);
-        document.querySelector("p").textContent = `¥${yen}`;
-    }
-
-    if (multiplierData) {
-        multiplier = Number(multiplierData);
-        console.log(`Multiplier loaded: ${multiplier}`);
-    }
-
-    if (multiplierPriceData) {
-        multiplierPrice = Number(multiplierPriceData);
-        console.log(`Multiplier price loaded: ${multiplierPrice}`);
-    }
+multiplierBtn.addEventListener('click', () => {
+  if (yen >= multiplierPrice) {
+    yen -= multiplierPrice;
+    multiplierPrice = Math.ceil(multiplierPrice * 1.1);
+    multiplier *= 2;
+    saveState();
+    updateDisplays();
+  }
 });
 
 input.addEventListener('change', () => {
-    console.log(input.value)
-
-    localStorage.setItem("colour", input.value);
-    document.querySelector('body').style.background = input.value;
+  localStorage.setItem('colour', input.value);
+  body.style.background = input.value;
 });
 
-
-
-document.querySelector('#multiplier').addEventListener('click', () => {
-    if (yen >= multiplierPrice) {
-        yen -= multiplierPrice; 
-        multiplierPrice = Math.ceil(multiplierPrice * 10.5); 
-        multiplier *= 2; 
-        console.log(`Multiplier updated to: ${multiplier}`);
-        console.log(`Yen after deduction: ${yen}`);
-        
-        document.querySelector("p").textContent = `¥${yen}`; 
-        localStorage.setItem("Yen", yen); 
-        localStorage.setItem("Multiplier", multiplier); 
-        localStorage.setItem("MultiplierPrice", multiplierPrice);
-        console.log(`Multiplier price updated to: ${multiplierPrice}`);
-    } else {
-        console.log("Not enough yen to purchase multiplier.");
-    }
+window.addEventListener('load', () => {
+  loadState();
+  updateDisplays();
+  startCpsInterval();
 });
-
