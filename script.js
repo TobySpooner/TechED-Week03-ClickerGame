@@ -1,23 +1,23 @@
 const input = document.querySelector("input");
 const defaultYen = 0;
 let yen = defaultYen;
-let multiplier = 1;
-let multiplierPrice = 100;
 
-const updateMultiplier = (num) => {
-    multiplier = num;
-};
-
+document.querySelector("#yenCoin").addEventListener('click', function () {
+    yen += 1
+    console.log(yen)
+    document.querySelector("p").textContent = `Yen: ${yen}`
+    localStorage.setItem("Yen", yen)
+});
 document.querySelector("#yenCoin").onkeyup = (e) => {
     if (e.key == " " ||
-        e.code == "Space" ||
-        e.keyCode == 32
-    ) {
-        yen += 1
-        console.log(yen)
-        document.querySelector("p").textContent = `Yen${yen}`
-        localStorage.setItem("Yen", yen)
-    }
+    e.code == "Space" ||      
+    e.keyCode == 32      
+) {
+    yen += 1
+    console.log(yen)
+    document.querySelector("p").textContent = `Yen: ${yen}`
+    localStorage.setItem("Yen", yen)
+}
 }
 
 document.addEventListener("keyup", (e) => {
@@ -52,17 +52,8 @@ window.addEventListener('load', () => {
 
     if (yenValue) {
         yen = Number(yenValue);
-        document.querySelector("p").textContent = `¥${yen}`;
-    }
 
-    if (multiplierData) {
-        multiplier = Number(multiplierData);
-        console.log(`Multiplier loaded: ${multiplier}`);
-    }
-
-    if (multiplierPriceData) {
-        multiplierPrice = Number(multiplierPriceData);
-        console.log(`Multiplier price loaded: ${multiplierPrice}`);
+        document.querySelector("p").textContent = `Yen: ${yenValue}`
     }
 });
 
